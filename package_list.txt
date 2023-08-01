@@ -1,0 +1,24 @@
+# environment setting
+# platform: osx-arm64
+
+cv2 - pip install opencv-python
+torch - pip install torch
+PIL - pip install pillow
+torchvision - pip install torch vision
+
+(numpy - conda)
+firebase_admin - pip install firebase_admin
+websockets - pip install websockets
+annoy - pip install annoy
+google-cloud-firestore - pip install google-cloud-firestore
+getmac - pip install get mac
+pygame - pip install pygame
+
+conda install -c apple tensorflow-deps
+pip install tensorflow-macos
+pip install tensorflow-metal
+conda install protobuf
+conda install python-flatbuffers
+
+pip install insightface
+conda install onnxruntime

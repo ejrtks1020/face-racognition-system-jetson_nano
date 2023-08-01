@@ -1,0 +1,101 @@
+jetson-stats 다운로드
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install python3-pip
+sudo -H pip3 install -U jetson-stats
+sudo reboot
+ 
+# jetson-stats 실행
+jtop
+
+파이썬 3.6.9 다운로드
+sudo apt install python3
+
+텐서플로우 다운로드
+
+sudo apt-get install libhdf5-serial-dev hdf5-tools libhdf5-dev zlib1g-dev zip libjpeg8-dev liblapack-dev libblas-dev gfortran
+sudo pip3 install -U pip testresources setuptools==49.6.0 
+sudo pip3 install -U --no-deps numpy==1.19.4 future==0.18.2 mock==3.0.5 keras_preprocessing==1.1.2 keras_applications==1.0.8 gast==0.4.0 protobuf pybind11 cython pkgconfig packaging
+sudo env H5PY_SETUP_REQUIRES=0 pip3 install -U h5py==3.1.0
+sudo pip3 install --extra-index-url https://developer.download.nvidia.com/compute/redist/jp/v$JP_VERSION tensorflow==$TF_VERSION+nv$NV_VERSION
+
+$JP_VERSION: 젯팻 버전의 앞자리 2개의 숫자를 가져오면 됩니다. Ex) 4.2.x 버전은 42, 4.3 버전은 43
+$TF_VERSION: 텐서플로우 버전을 입력해주시면 됩니다. Ex) 2.7.0
+$NV_VERSION: NVIDIA container 버전을 입력해주시면 됩니다.  Ex) 22.01
+
+버전확인 : https://docs.nvidia.com/deeplearning/frameworks/install-tf-jetson-platform-release-notes/tf-jetson-rel.html#tf-jetson-rel
+
+PyTorch 다운로드
+
+
+Python 3.6
+wget https://nvidia.box.com/shared/static/p57jwntv436lfrd78inwl7iml6p13fzh.whl -O torch-1.8.0-cp36-cp36m-linux_aarch64.whl
+sudo apt-get install python3-pip libopenblas-base libopenmpi-dev libomp-dev
+pip3 install Cython
+pip3 install numpy torch-1.8.0-cp36-cp36m-linux_aarch64.whl
+
+onnxruntime-gpu 설치
+# Download pip wheel from location mentioned above
+$ wget https://nvidia.box.com/shared/static/jy7nqva7l88mq9i8bw3g3sklzf4kccn2.whl -O onnxruntime_gpu-1.10.0-cp36-cp36m-linux_aarch64.whl
+
+# Install pip wheel
+$ pip3 install onnxruntime_gpu-1.10.0-cp36-cp36m-linux_aarch64.whl
+onnx 설치
+$ sudo apt-get install python-pip protobuf-compiler libprotoc-dev
+$ pip install Cython --user
+pip3 install —-no-cache-dir onnx==1.6.0
+
+기타 필수 패키지 다운로드
+pip3 install —-no-cache-dir insightface
+pip3 install —-no-cache-dir firebase_admin
+pip3 install —-no-cache-dir annoy
+pip3 install —-no-cache-dir pygame
+pip3 install —-no-cache-dir getmac
+pip3 install —-no-cache-dir websockets
+
+(CUDA 가속활성화버전) OpenCV 설치
+( ※ 주의 : 설치중에 메모리 사용량이 최대 8.7기가까지 올라가므로 추가적으로 메모리 스왑을 늘려야함)
+wget https://github.com/Qengineering/Install-OpenCV-Jetson-Nano/raw/main/OpenCV-4-5-4.sh 
+sudo chmod 755 ./OpenCV-4-5-4.sh 
+./OpenCV-4-5-4.sh
+
+rm OpenCV-4-5-4.sh
+ 
+# 275MB 추가 SD공간 확보를 원한다면 
+sudo rm -rf ~/opencv
+sudo rm -rf ~/opencv_contrib
+
+메모리 스왑 (reference : https://github.com/JetsonHacksNano/installSwapfile)
+git clone https://github.com/JetsonHacksNano/installSwapfile.git
+cd installSwapfile
+USB 및 기타 외장메모리에 스왑 : ./installSwapfile.sh [-d directory] [-s size]
+내장 storage에 스왑시 (내장 메모리 용량이 스왑을 할당하고도 최소 1~2기가이상 충분할때만, 그렇지 않으면 부팅이 안될수 있음)
+./installSwapfile.sh -s size
+
+스왑 메모리 해제시
+sudo vim /etc/fstab
+mnt 경로를 주석처리
+mnt 경로에 swapfile 삭제후 재부팅
+
+
+Cannot allocate memory 에러
+터미널에 export LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libgomp.so.1
+제일 먼저 scikit-learn을 불러온다. -> import sklearn 
+
+illegal instruction (core dumped) 에러
+-> sudo vim ~./bashrc
+환경변수등록
+-> export ENBLAS_CORETYPE=ARMV8 python
+
+외장 USB 드라이브를 마운트해서 용량 확장후, USB에 추가적으로 스왑을 늘려서 메모리 확장하는법
+
+외장 USB 파일시스템(예시) : /dev/sda2
+마운트할 경로 : /usr/local 
+
+USB마운트
+mount /dev/sda2 /usr/local
+
+4gb memory swap
+bash installSwapfile -d /usr/local -s 4
+
+
